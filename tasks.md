@@ -1,6 +1,6 @@
-# Tasks
+# 部署任务
 
-Define you own tasks, use the `task` function. Also you can setup description for task with `desc` function:
+使用 `task` 函数来定义你自己的部署任务， 此外，您可以使用 `desc` 函数设置任务描述：
 
 ```php
 desc('My task');
@@ -9,19 +9,19 @@ task('my_task', function () {
 });
 ```
 
-To run your tasks:
+运行指定任务:
 
 ```sh
 dep my_task
 ```
 
-To list all available commands:
+列出所有可用的命令:
 
 ```sh
 dep list
 ```
 
-To run a task only on a specified server or stage:
+在指定的阶段服务器上运行部署任务:
 
 ```sh
 dep deploy main
@@ -29,12 +29,14 @@ dep deploy main
 
 If you task contains only `run` calls or just one bash command, you can simplify task definition:
 
+如果任务仅包含 `run` 调用或仅一个 bash 命令，则可以简化任务定义写法：
+
 ```php
 task('build', 'npm build');
 ```
 
-Or you can use multi line script:
- 
+或者这样使用换行来定义多条 bash 命令:
+
 ```php
 task('build', '
     gulp build;
@@ -43,9 +45,9 @@ task('build', '
 ');
 ```
 
-### Task grouping
+### Task 分组
 
-You can combine tasks in groups:
+你可以这样来定义一个任务组:
 
 ```php
 task('deploy', [
@@ -57,9 +59,9 @@ task('deploy', [
 ]);
 ```
 
-### Before and after
+### 任务执行前/执行后
 
-You can define tasks to be run before or after some tasks.
+您可以在某些任务之前或之后定义要运行的任务。
 
 ``` php
 task('deploy:done', function () {
@@ -69,11 +71,11 @@ task('deploy:done', function () {
 after('deploy', 'deploy:done');
 ```
 
-After the `deploy` task is be called, `deploy:done` will be executed.
+在 `deploy` 任务执行后, `deploy:done` 将会执行。
 
-### Only on
+### 任务执行条件
 
-You can specify on which server to run task with `onlyOn` method:
+你可以使用 `onlyOn` 方法来指定在哪些服务器上执行任务：
 
 ``` php
 desc('Run tests for application.');
@@ -82,9 +84,9 @@ task('test', function () {
 })->onlyOn('test_server');
 ```
 
-Also you can specify a group of servers to run as arguments: `onlyOn('server1', 'server2', ...)` or as an array `onlyOn(['server1', 'server2', ...])`.
+你可以使用: `onlyOn('server1', 'server2', ...)` 或者一个数组 `onlyOn(['server1', 'server2', ...])` 方式来指定在多台服务器上执行任务。
 
-To run task only on specified stages use `onlyForStage`:
+使用 `onlyForStage` 方法指定的阶段服务器上运行部署任务：
 
 ```php
 task('notify', function () {
@@ -92,9 +94,9 @@ task('notify', function () {
 })->onlyForStage('prod');
 ```
 
-Also you can specify a group of stages to run as arguments: `onlyForStage('stage1', 'stage2', ...)` or as an array `onlyForStage(['stage1', 'stage2', ...])`.
+同样你也可以使用: `onlyForStage('stage1', 'stage2', ...)` 或者一个数组 `onlyForStage(['stage1', 'stage2', ...])` 方式来指定在多个阶段执行任务。
 
-### Once
+### 单次任务
 
 Mark task `once` to run it locally and only one time, independent of servers count.
 
@@ -104,9 +106,9 @@ task('notify', function () {
 })->once();
 ```
 
-> Note what calling `run` inside that task will have same effect as calling `runLocally`. 
+> Note what calling `run` inside that task will have same effect as calling `runLocally`.
 
-### Reconfigure
+### 重新配置
 
 You can reconfigure tasks, e.g. provided by 3rd part recipes by retrieving them by name:
 
@@ -117,9 +119,9 @@ task('notify')->onlyOn([
 ]);
 ```
 
-### Using input options
+### 获取输入选项
 
-You can define additional input options and arguments, before defining tasks:
+你可以在定义任务之前定义额外的输入或选项:
 
 ``` php
 use Symfony\Component\Console\Input\InputOption;
@@ -129,7 +131,7 @@ argument('stage', InputArgument::OPTIONAL, 'Run tasks only on this server or gro
 option('tag', null, InputOption::VALUE_OPTIONAL, 'Tag to deploy.');
 ```
 
-To get the input inside a task this can be used:
+你可以像下面这样在任务内获取输入或者选项：
 
 ``` php
 task('foo:bar', function() {
@@ -138,7 +140,7 @@ task('foo:bar', function() {
     if (input()->hasArgument('stage')) {
         $stage = input()->getArgument('stage');
     }
-    
+
     // For option
     $tag = null;
     if (input()->hasOption('tag')) {
@@ -147,9 +149,9 @@ task('foo:bar', function() {
 }
 ```
 
-### Parallel task execution
+### 并行执行
 
-When deploying to multiple server, Deployer will run by one task on each server:
+如果我们定义了多台服务器，Deploery 可以同时并行执行部署任务：
 
 <svg width="600" height="305" viewBox="990 42 600 305" xmlns="http://www.w3.org/2000/svg">
   <g fill="none" fill-rule="evenodd">
@@ -222,7 +224,7 @@ When deploying to multiple server, Deployer will run by one task on each server:
   </g>
 </svg>
 
-To speedup deployment add `--parallel` or `-p` option with will run tasks in parallel on each server. If one of server executing task longer then another, Deployer will wait until all servers finish tasks.
+你可以使用 `--parallel` 或者 `-p` 选项来在多台服务器上并行执行部署任务。如果其中一台服务器执行时间比其它服务器长，Deploery 将会一直等到所有服务器上的任务执行完成。
 
 <svg width="600" height="305" viewBox="990 418 600 305" xmlns="http://www.w3.org/2000/svg">
   <g fill="none" fill-rule="evenodd">
@@ -295,4 +297,4 @@ To speedup deployment add `--parallel` or `-p` option with will run tasks in par
   </g>
 </svg>
 
-Next: [servers configuration](servers.md).
+下一篇: [服务器配置](servers.md).

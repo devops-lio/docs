@@ -1,6 +1,6 @@
-# Servers
+# 服务器配置
 
-You can define servers with the `server` function. Here is an example of a server definition:
+你可以使用 `server` 函数来定义你的服务器。这里有一个例子供参考：
 
 ~~~ php
 server('prod_1', 'domain.com')
@@ -8,7 +8,7 @@ server('prod_1', 'domain.com')
     ->password('pass')
     ->set('deploy_path', '/home/www')
     ->stage('production');
-    
+
 server('prod_2', 'domain.com')
     ->user('user')
     ->password('pass')
@@ -18,11 +18,11 @@ server('prod_2', 'domain.com')
     ->stage('production');
 ~~~
 
-This function takes 2 parameters, like this: `server(server_name, host)` (Port can be passed as 3rd parameter). It returns a `Deployer\Server\Builder` object.
+这个函数接受两个参数，像这样: `server(server_name, host)` (端口可以放到第三个参数)。 它将返回一个 `Deployer\Server\Builder` 对象。
 
-To specify how to connect to a server using SSH, there are a few ways:
+要指定如何使用 SSH 连接到服务器，有几种方法：
 
-### With a username and a password
+### 使用指定的用户名密码
 
 ~~~ php
 server(...)
@@ -30,7 +30,7 @@ server(...)
   ->password('pass')
 ~~~
 
-### With a username and a typed password
+### 使用用户名与输入密码
 
 ~~~ php
 server(...)
@@ -38,9 +38,9 @@ server(...)
   ->password(null)
 ~~~
 
-Set password to *null* and it will be asked.
+将密码设置为 *null* 将会在部署时让你手动输入。
 
-### With an identity file
+### 使用密钥
 
 ~~~ php
 server(...)
@@ -48,7 +48,7 @@ server(...)
     ->identityFile();
 ~~~
 
-If your keys were created with a password or if they are located outside of the `.ssh` directory, you can specify the location by providing the full path:
+如果您的密钥是使用密码创建的，或者它们位于 `.ssh` 目录之外，则可以通过提供完整路径指定位置：
 
 ~~~ php
 server(...)
@@ -56,9 +56,9 @@ server(...)
     ->identityFile('~/.ssh/id_rsa.pub', '~/.ssh/id_rsa', 'pass phrase');
 ~~~
 
-### 2-factor authentication with an identity file and password or google-authenticator:
+### 使用 密钥 + 密码 或 Google 身份验证器 的两步认证方式：
 
-If your server is secured with 2-factor, you can connect via your private key + the second factor (password or google-authenticator).  Note this the current version only supports *PhpSecLib*:
+如果您的服务器使用两步认证方式进行安全保护，则可以通过私钥 + 两步认证器（密码 或 Google 身份验证器）进行连接。 注意当前版本只支持 *PhpSecLib*：
 
 ~~~ php
 server(...)
@@ -66,7 +66,7 @@ server(...)
     ->identityFileAndPassword();
 ~~~
 
-As with the normal identityFile() call, if your keys were created with a password or if they are located outside of the `.ssh` directory, you can specify the location by providing the full path:
+与普通的 identityFile() 调用一样，如果您的密钥是使用密码创建的，或者它们位于 `.ssh` 目录之外，则可以通过提供完整路径指定位置：
 
 ~~~ php
 server(...)
@@ -74,11 +74,11 @@ server(...)
     ->identityFileAndPassword('~/.ssh/id_rsa.pub', '~/.ssh/id_rsa', 'pass phrase', 'password');
 ~~~
 
-The `~` symbol  will be replaced with your home directory. 
+这个 `~` 符号将会替换为你的家目录（本机非目标服务器）。
 
-### With a config file
+### 通过配置文件
 
-Deployer can use your SSH config file.
+Deployer 也可以使用你的 SSH 配置文件来指定连接方式。
 
 ~~~ php
 server(...)
@@ -86,7 +86,7 @@ server(...)
     ->configFile('/path/to/file');
 ~~~
 
-### With a pem file
+### 使用证书文件
 
 ~~~ php
 server('ec2', 'host.aws.amazon.com')
@@ -94,16 +94,17 @@ server('ec2', 'host.aws.amazon.com')
     ->pemFile('~/.ssh/keys.pem');
 ~~~
 
-> Authentication using a pem file is currently only supported with PhpSecLib.
+> 使用 pem 文件的身份验证方式目前仅支持 PhpSecLib。
 
-### Using PHP SSH2 extension
+### 使用 PHP SSH2 拓展
 
-Package `herzult/php-ssh` is required for this to work but is not included inside `deployer.phar` so you should install `deployer/deployer` and `herzult/php-ssh` using composer:
+要使用这种认证方式，需要用到拓展 `herzult/php-ssh`， 它没有默认包含在 `deployer.phar`，所以你需要使用 Composer 安装它：
 
 ```
 composer require deployer/deployer herzult/php-ssh
 ```
-Example `deploy.php` file:
+
+示例清单 `deploy.php`:
 
 ```php
 require 'vendor/autoload.php';
@@ -112,15 +113,16 @@ require 'vendor/deployer/deployer/recipe/symfony.php';
 set('ssh_type', 'ext-ssh2');
 //...
 ```
-## Upload and download
 
-You can upload a file or directory with the `upload(local, remote)` function.
+## 上传与下载
 
-You can download a file with the `download(local, remote)` function.
+你可以使用 `upload(local, remote)` 函数来完成上传任务。
 
-## Servers list
+同样你也可以使用 `download(local, remote)` 函数来从服务器下载内容。
 
-You can define servers in YAML file:
+## 服务器列表
+
+你可以使用一个 YAML 文件来定义你的服务器列表：
 
 ~~~ yml
 prod:
@@ -129,7 +131,7 @@ prod:
   identity_file: ~
   stage: production
   deploy_path: /home/www/
-  
+
 prod.a:
   host: a.domain.com
   user: www
@@ -138,32 +140,32 @@ prod.a:
     private_key: /path/to/private.key
     password:    optional-password-for-private-key-or-null
   stage: production
-  deploy_path: /home/www/  
-  
+  deploy_path: /home/www/
+
 beta:
   host: beta.domain.com
   user: www
   password: pass
   stage: beta
   deploy_path: /home/www/
-  
+
 test:
   host: test.domain.com
   user: www
   password: pass
   stage: beta
-  deploy_path: /home/www/  
+  deploy_path: /home/www/
 ~~~
 
-And then in `deploy.php`:
+然后在 `deploy.php` 中使用下面的方式来注册它们：
 
 ~~~ php
 serverList('servers.yml');
 ~~~
 
-## Server list YAML file and server configuration
+## 服务器列表的 YAML 文件格式与服务器配置
 
-You can set config variables per server definition. When parsing server configurations, all keys other than the one listed below are treated as server config variables and can be retrieved using `get('key')` or `{{ key }}`:
+您可以为每个服务器定义配置变量。 解析服务器配置时，除下列之外的所有都被视为服务器配置变量，可以使用 `get('key')` 或 `{{key}}` 来读取它们：
 
 * `local`
 * `host`
@@ -176,16 +178,16 @@ You can set config variables per server definition. When parsing server configur
 * `pem_file`
 
 
-## Local Server
+## 本地服务器
 
-Also, you can define *localServer*, it runs all commands locally without ssh.
+此外，您可以定义 *本地服务器*，它在本地运行所有命令而不使用 ssh。
 
 ~~~ php
 localServer(...)
     ->stage('local');
 ~~~
 
-In external .yml definition the keyword `local: `can be used.
+在外部的 .yml 中定义，你可以使用关键字 "local: "。
 
 ~~~ yml
 development:
@@ -193,29 +195,29 @@ development:
     # ....
 ~~~
 
-For instance, you can use it to update your local project.
+例如，您可以使用它来更新本地项目。
 
-## Stages
+## 阶段（Stages）
 
-You can define every server with a stage, or list of stages:
+您可以为每个服务器定义一个阶段，或一个阶段列表:
 
 ~~~ php
 server(...)
     ->stage('prod');
-    
+
 server(...)
-    ->stage(['prod', 'stage']);    
-    
+    ->stage(['prod', 'stage']);
+
 server(...)
-    ->env('stages', ['stage']);    
+    ->env('stages', ['stage']);
 ~~~
 
-And then you call command `dep [task] [server or stage]`, it will be executed only on specified stage servers.
+然后你可以使用命令 `dep [task] [server or stage]` 在不同的阶段运行部署任务, 它将会只在指定的阶段运行。
 
-It is possible to specify a default stage that will be executed if you do not give a stage on the command line. You can do this by setting the `default_stage` parameter.
+如果您不在命令行指定阶段将会在默认阶段上执行。 您可以通过设置 `default_stage` 参数来指定默认阶段。
 
-~~~ php 
-set('default_stage', 'staging'); 
+~~~ php
+set('default_stage', 'staging');
 ~~~
 
-If you run a command without specifying a stage or a default, it will be executed on the server without a specified stage.
+如果没有指定一个阶段或默认阶段去执行一个命令，它会在所有没有指定阶段的服务器上执行。

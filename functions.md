@@ -1,37 +1,37 @@
-# Functions
+# 函数
 
-Deployer provides a lot of helpful functions. Make sure to learn about them!
+Deployer 提供了许多工具函数，请在使用之前详细了解它们。
 
 ```php
 run(string $command)
 ```
 
-Run command on remote server.
+在远程服务器上运行命令：
 
 ```php
 cd(string $path)
 ```
 
-Sets the working path for the following `run` functions. 
-Every task restores the working path to the base working path at the beginning of the task.
+为 `run` 命令设置工作目录。
+在每个任务开始前都会重置工作目录。
 
 ```php
 runLocally(string $command, int $timeout = 60)
 ```
 
-Runs a command on your local machine.
-Default timeout: 60 seconds
+在你本地运行命令。
+默认超时: 60 秒
 
 ```php
 upload(string $file, string $uploadFile)
 ```
 
-Upload a file from your machine to your deployment machine
-You can use environment in both $file and $uploadFile - meaning you can type something like this
+上传一个文件到远程服务器上。
+你可以在 $file 和 $uploadFile 使用环境变量，这意味着你可以像下面这样写：
 
 upload('.deploy/parameters.{{env}}.yml', '{{release_path}}/app/config/parameters.yml');
 
-Which will be translated to something like this
+将被转换为：
 
 upload('.deploy/parameters.dev.yml', '/var/www/release/current/app/config/parameters.yml');
 
@@ -39,47 +39,47 @@ upload('.deploy/parameters.dev.yml', '/var/www/release/current/app/config/parame
 download(string $localFile, string $deploymentFile)
 ```
 
-Download a file from your deployment machine to your machine
+从远程服务器下载一个文件到本地。
 
 
 ```php
 write(string $message)
 ```
 
-Write message in the console. You can format the message with the tags `<info>...</info>`, `<comment></comment>` or `<error></error>` (see [Symfony Console](http://symfony.com/doc/current/components/console/introduction.html#coloring-the-output)).
+在命令行输出消息，你可以使用这些标签来格式化消息样式： `<info>...</info>`, `<comment></comment>` 或 `<error></error>` (see [Symfony Console](http://symfony.com/doc/current/components/console/introduction.html#coloring-the-output)).
 
 ```php
 writeln(string $message)
 ```
 
-Same as the `write` function, but also writes a new line.
+与 `write` 函数相同，结尾有换行。
 
 ```php
 ask(string $message, mixed $default)
 ```
 
-Ask the user for input. You need to specify a default value which will be used in quiet mode.
+要求用户输入内容，你也可以指定一个默认值来方便快速操作。
 
 ```php
 askChoice(string $message, array $availableChoices, mixed $default, bool $multiselect)
 ```
 
-Ask the user to select from multiple key/value options and return an array. Multiselect enables selection of multiple comma separated choices. Default value will be used in quiet mode otherwise the first available choice will be accepted.
+让用户选择对应的内容，选项使用 key/value 指定，多选可用时，使用 `,` 号分隔默认值，默认值将在安静模式下使用，否则第一个可用选项将被选中。
 
 ```php
 askConfirmation(string $message[, bool $default = false])
 ```
 
-Ask the user a yes or no question.
+让用户做一个选择，yes or no。
 
 ```php
 askHiddenResponse(string $message)
 ```
 
-Ask the user for a password.
+要求用户输入敏感内容，输入时不可见。
 
 ```php
 output()
 ```
 
-Get the current console output.
+获取当前命令行输出对象。
