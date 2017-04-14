@@ -21,7 +21,7 @@ dep my_task
 dep list
 ```
 
-在指定的阶段服务器上运行部署任务:
+在指定的平台服务器上运行部署任务:
 
 ```sh
 dep deploy main
@@ -86,7 +86,7 @@ task('test', function () {
 
 你可以使用: `onlyOn('server1', 'server2', ...)` 或者一个数组 `onlyOn(['server1', 'server2', ...])` 方式来指定在多台服务器上执行任务。
 
-使用 `onlyForStage` 方法指定的阶段服务器上运行部署任务：
+使用 `onlyForStage` 方法指定的平台服务器上运行部署任务：
 
 ```php
 task('notify', function () {
@@ -94,7 +94,7 @@ task('notify', function () {
 })->onlyForStage('prod');
 ```
 
-同样你也可以使用: `onlyForStage('stage1', 'stage2', ...)` 或者一个数组 `onlyForStage(['stage1', 'stage2', ...])` 方式来指定在多个阶段执行任务。
+同样你也可以使用: `onlyForStage('stage1', 'stage2', ...)` 或者一个数组 `onlyForStage(['stage1', 'stage2', ...])` 方式来指定在多个平台执行任务。
 
 ### 单次任务
 
