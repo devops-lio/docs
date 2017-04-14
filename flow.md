@@ -1,8 +1,5 @@
 # 工作流
 
-If your recipe based on *common* recipe or one of frameworks recipe shiped with Deployer, then you are using one of our default flows.
-Each flow described as group task of other tasks in `deploy` name space. Common deploy flow may look like this:
-
 如果您的部署清单基于 *common* 清单或其它与 Deployer 内置的框架部署方案，那么您正在使用我们的默认流程之一。
 每个流程描述为 `deploy` 命名空间中的其他任务的组任务。 普通部署流程可能看起来像这样：
 
