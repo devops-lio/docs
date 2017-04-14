@@ -59,7 +59,7 @@ set('ssh_multiplexing', true);
 
 ### default_stage
 
-指定 `dep deploy` 使用的默认阶段。
+指定 `dep deploy` 使用的默认平台。
 
 ```php
 set('default_stage', 'prod');
